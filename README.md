@@ -1,5 +1,4 @@
 # weight-tracker
-weight-tracker app
 ==============================
 
 ## Django Server
