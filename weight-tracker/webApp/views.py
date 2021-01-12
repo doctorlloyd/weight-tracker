@@ -13,14 +13,10 @@ class WeightView(generics.ListAPIView):
     serializer_class = serializers.WeightList
 
     def get_queryset(self):
-    #     """
-    #     Optionally restricts the returned weights to a given user,
-    #     by filtering against a `exercise` query parameter in the URL.
-    #     """
         queryset = models.Weight.objects.all()
         customer = self.request.query_params.get('customer', None)
         if customer is not None:
-            queryset = models.Weight.objects.filter(user=customer).order_by("date_entered").distinct()
+            queryset = models.Weight.objects.filter(customer_id=customer).order_by("date_entered").distinct()
         return queryset
 
 class Customer(generics.RetrieveUpdateAPIView):

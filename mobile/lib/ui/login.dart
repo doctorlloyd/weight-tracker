@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/customer.dart';
 import 'package:mobile/models/token.dart';

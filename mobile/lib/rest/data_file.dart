@@ -35,12 +35,11 @@ class RestDataSource {
     final profile = baseUrl + '/customer/';
     Response _response = await get(profile, headers: requestHeaders());
     Map<String, dynamic> map = jsonDecode(_response.body);
-    print('----------CUSTOMER-------------: $map');
     return Customer.fromJson(map);
   }
 
   Future<List<Weight>> getWeightList(String param) async {
-    var apiUrl = domain + '/weight/?customer=$param';
+    var apiUrl = baseUrl + '/weight/?customer=$param';
     http.Response products = await http.get(apiUrl, headers: requestHeaders());
     List<dynamic> productList = json.decode(products.body);
     return productList.map((i) => Weight.fromJson(i)).toList();
