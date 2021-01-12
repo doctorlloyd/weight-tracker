@@ -29,3 +29,4 @@ class Customer(generics.RetrieveUpdateAPIView):
 
     def get_queryset(self):
         return models.Customer.objects.none()
+

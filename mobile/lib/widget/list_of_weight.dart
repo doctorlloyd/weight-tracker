@@ -74,19 +74,46 @@ class _WeightList extends State<WeightList> {
       itemCount: weightList.length,
       itemBuilder: (context, index) {
         final item = weightList[index];
-        return designedCard(item);
-      },
-    );
-  }
 
-  Widget designedCard(Weight weight) {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Text('Date: ${weight.dateEntered}'),
-          Text('Weight: ${weight.weight}'),
-        ],
-      ),
+        // return Dismissible(
+        //   key: Key(item.weight),
+        //   onDismissed: (direction) {
+        //     setState(
+        //       () {
+        //         weightList.removeAt(index);
+        //       },
+        //     );
+        //   },
+        //   background: Container(color: Colors.red),
+        //   child: ListTile(
+        //     title: Text('${item.weight}'),
+        //   ),
+        // );
+        return Card(
+          elevation: 4,
+          shadowColor: Colors.greenAccent,
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: InkWell(
+                onTap: () {
+                  //TODO edit
+                },
+                onLongPress: (){
+                  //TODO delete
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Date: ${item.dateEntered}'),
+                    Text('Weight: ${item.weight}'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
