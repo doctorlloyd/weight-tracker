@@ -19,7 +19,8 @@ class WeightView(generics.ListAPIView):
     #     """
         queryset = models.Weight.objects.all()
         customer = self.request.query_params.get('customer', None)
-
+        if customer is not None:
+            queryset = models.Weight.objects.filter(user=customer).order_by("date_entered").distinct()
         return queryset
 
 class Customer(generics.RetrieveUpdateAPIView):
@@ -30,5 +31,5 @@ class Customer(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user.customer
 
-    # def get_queryset(self):
-    #     return models.Customer.objects.none()
+    def get_queryset(self):
+        return models.Customer.objects.none()

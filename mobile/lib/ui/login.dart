@@ -390,50 +390,31 @@ class _Login extends State<Login> {
       _isLoading = true;
     });
 
-    // try {
+    try {
       Token token = await _restDataSource.login(
           usernameLoginController.text, passwordLoginController.text);
 
-      //Storing user token to the local database
       storage.setItem('token', token.toJson());
-      //end block
       if (token != null) {
-        //Get DeepUser object using a token
-        List<Customer> user = await _restDataSource.profile();
-        //end block
-        // print('----------------------- $user');
-      } else {
-        setState(() {
+        Customer user = await _restDataSource.profile();
+
+        if (user != null) {
+          storage.setItem('current_user', user);
+
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
           print('User not found');
-          _isLoading = false;
-        });
+        }
+      } else {
+        print('User not found');
       }
-      //
-      // if (user != null) {
-      //   //Check if User object is complete
-      //   if (user.userRole.isEmpty) return;
-      //
-      //   //Storing user on local database
-      //   storage.setItem('current_user', user);
-      //   //end block
-      //
-      //   if (user.userRole == 'patient')
-      //     Navigator.pushReplacementNamed(context, '/home');
-      //   else
-      //     Navigator.pushReplacementNamed(context, '/practitionerHome');
-      // } else {
-      //   // Scaffold.of(context).showSnackBar(snackBar);
-      //   setState(() {
-      //     print('User not found');
-      //     _isLoading = false;
-      //   });
-      // }
-    // } catch (error) {
-    //   //Dialog to alert a user that an application is failing to update or covert JSON structure
-    // } finally {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    // }
+    } catch (error) {
+      //Dialog to alert a user that an application is failing to update or covert JSON structure
+      print(error.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

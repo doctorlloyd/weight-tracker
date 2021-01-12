@@ -31,12 +31,12 @@ class RestDataSource {
     });
   }
 
-  Future<List<Customer>> profile() async {
+  Future<Customer> profile() async {
     final profile = baseUrl + '/customer/';
     Response _response = await get(profile, headers: requestHeaders());
-    List<dynamic> map = jsonDecode(_response.body);
+    Map<String, dynamic> map = jsonDecode(_response.body);
     print('----------CUSTOMER-------------: $map');
-    return map.map((i) => Customer.fromJson(i)).toList();
+    return Customer.fromJson(map);
   }
 
   Future<List<Weight>> getWeightList(String param) async {
