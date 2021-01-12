@@ -3,6 +3,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/customer.dart';
 import 'package:mobile/models/weight.dart';
 import 'package:mobile/rest/data_file.dart';
+import 'package:mobile/widget/update_weight.dart';
 
 class WeightList extends StatefulWidget {
   @override
@@ -29,6 +30,16 @@ class _WeightList extends State<WeightList> {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade200,
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.power_settings_new),
+            iconSize: 30.0,
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+          ),
+        ],
         title: Text("Day to Day weight"),
         backgroundColor: Colors.black12,
       ),
@@ -74,31 +85,46 @@ class _WeightList extends State<WeightList> {
       itemCount: weightList.length,
       itemBuilder: (context, index) {
         final item = weightList[index];
-        return Card(
-          elevation: 4,
-          shadowColor: Colors.greenAccent,
-          child: Container(
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: InkWell(
-                onTap: () {
-                  //TODO edit
-                },
-                onLongPress: () {
-                  //TODO delete
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Date: ${item.dateEntered}'),
-                    Text('Weight: ${item.weight}'),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
+        return card(item);
       },
     );
+  }
+
+  Widget card(Weight weight) {
+    return Card(
+      elevation: 4,
+      shadowColor: Colors.greenAccent,
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return UpdateWeight(weight);
+                  },
+                ),
+              );
+            },
+            onLongPress: () {
+              delete(weight);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Date: ${weight.dateEntered}'),
+                Text('Weight: ${weight.weight}'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void delete(Weight weight) async{
+
   }
 }

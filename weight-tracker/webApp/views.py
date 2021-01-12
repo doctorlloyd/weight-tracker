@@ -87,3 +87,7 @@ class AddWeightView(generics.RetrieveUpdateAPIView):
         response = 'Successful delete route'.format(route.display_name())
         route.delete()
         return HttpResponse(response)
+
+    def put(self,request,train_id=None):
+        response = models.Weight.objects.filter(pk=train_id).update(weight=request.weight)
+        return HttpResponse(response)

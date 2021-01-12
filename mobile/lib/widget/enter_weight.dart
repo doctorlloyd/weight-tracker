@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/customer.dart';
+import 'package:mobile/models/token.dart';
 import 'package:mobile/rest/data_file.dart';
 
 class Weight extends StatefulWidget {
@@ -30,6 +30,16 @@ class _Weight extends State<Weight> {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade200,
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.power_settings_new),
+            iconSize: 30.0,
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+          ),
+        ],
         title: Text("Enter weight"),
         backgroundColor: Colors.black12,
       ),
@@ -119,11 +129,9 @@ class _Weight extends State<Weight> {
 
   addWeight() async {
     if (enteredWeightController.text.isNotEmpty) {
-      Response response = await _restDataSource.weight(
+      Token response = await _restDataSource.addWeight(
           enteredWeightController.text, customer.user.toString());
-      if(response.statusCode == 200){
         enteredWeightController.clear();
-      }
     }
   }
 }

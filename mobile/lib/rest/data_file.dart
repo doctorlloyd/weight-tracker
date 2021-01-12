@@ -56,13 +56,22 @@ class RestDataSource {
     );
   }
 
-  Future<Response> weight(String weight, String user) async {
-    final login = baseUrl + '/addweight/';
-    return await netUtil.post(login,
+  Future<Token> addWeight(String weight, String user) async {
+    final weighturl = baseUrl + '/addweight/';
+    return await netUtil.post(weighturl,
         headers: requestHeaders(),
         body: {'weight': weight, 'user':user}).then((dynamic res) {
           print('------------------: $res');
-      return res;
+      return Token.fromJson(res);
+    });
+  }
+  Future<Token> putWeight(String weight, String user) async {
+    final weighturl = baseUrl + '/addweight/';
+    return await netUtil.post(weighturl,
+        headers: requestHeaders(),
+        body: {'weight': weight, 'user':user}).then((dynamic res) {
+          print('------------------: $res');
+      return Token.fromJson(res);
     });
   }
 
