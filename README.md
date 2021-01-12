@@ -1,5 +1,4 @@
 # weight-tracker
-==============================
 
 ## Django Server
 To strat Django server
