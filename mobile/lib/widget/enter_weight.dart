@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:mobile/models/customer.dart';
+import 'package:mobile/rest/data_file.dart';
 
 class Weight extends StatefulWidget {
   @override
@@ -7,6 +11,19 @@ class Weight extends StatefulWidget {
 
 class _Weight extends State<Weight> {
   TextEditingController enteredWeightController = TextEditingController();
+  RestDataSource _restDataSource;
+  bool _isLoading = false;
+  final LocalStorage storage = new LocalStorage('weightTrackerDB');
+  Map<String, dynamic> user;
+  Customer customer;
+
+  @override
+  void initState() {
+    super.initState();
+    _restDataSource = RestDataSource();
+    user = storage.getItem('current_user');
+    customer = Customer.fromJson(user);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +101,10 @@ class _Weight extends State<Weight> {
                       color: Colors.deepOrangeAccent[100],
                       textColor: Colors.white,
                       onPressed: () {
-
+                        addWeight();
                       },
-                      child: Text('Submit your weight', style: TextStyle(fontSize: 20)),
+                      child: Text('Submit your weight',
+                          style: TextStyle(fontSize: 20)),
                     ),
                     SizedBox(width: 10),
                   ],
@@ -97,5 +115,15 @@ class _Weight extends State<Weight> {
         ),
       ),
     );
+  }
+
+  addWeight() async {
+    if (enteredWeightController.text.isNotEmpty) {
+      Response response = await _restDataSource.weight(
+          enteredWeightController.text, customer.user.toString());
+      if(response.statusCode == 200){
+        enteredWeightController.clear();
+      }
+    }
   }
 }

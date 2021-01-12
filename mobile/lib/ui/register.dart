@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:mobile/models/customer.dart';
+import 'package:mobile/models/token.dart';
 import 'package:mobile/rest/data_file.dart';
 
 class Register extends StatefulWidget {
@@ -15,7 +17,7 @@ class _Register extends State<Register> {
   TextEditingController usernameLoginController = TextEditingController();
   TextEditingController passwordLoginController = TextEditingController();
   TextEditingController confirmPasswordLoginController =
-      TextEditingController();
+  TextEditingController();
 
   @override
   void initState() {
@@ -63,9 +65,12 @@ class _Register extends State<Register> {
                   ],
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   margin:
-                      const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                  const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: Border(
@@ -83,7 +88,6 @@ class _Register extends State<Register> {
                       Expanded(
                         child: TextField(
                           controller: usernameLoginController,
-                          obscureText: true,
                           textAlign: TextAlign.left,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -113,7 +117,10 @@ class _Register extends State<Register> {
                   ],
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   margin: const EdgeInsets.only(left: 40.0, right: 40.0),
                   // alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -161,9 +168,12 @@ class _Register extends State<Register> {
                   ],
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   margin:
-                      const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                  const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: Border(
@@ -211,9 +221,12 @@ class _Register extends State<Register> {
                   ],
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   margin:
-                      const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                  const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: Border(
@@ -245,7 +258,7 @@ class _Register extends State<Register> {
                 ),
                 Container(
                   margin:
-                      const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+                  const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -289,7 +302,8 @@ class _Register extends State<Register> {
                           ),
                           textAlign: TextAlign.end,
                         ),
-                        onPressed: () => {
+                        onPressed: () =>
+                        {
                           Navigator.pushReplacementNamed(context, '/'),
                         },
                       ),
@@ -309,12 +323,34 @@ class _Register extends State<Register> {
       _isLoading = true;
     });
 
-    try {
+    if ((confirmPasswordLoginController.text).isNotEmpty ==
+        (passwordLoginController.text).isNotEmpty) {
+      try {
+        Token token = await _restDataSource.register(
+            usernameLoginController.text, passwordLoginController.text,
+            emailLoginController.text);
+        storage.setItem('token', token.toJson());
+        if (token != null) {
+          Customer user = await _restDataSource.profile();
 
+          if (user != null) {
+            storage.setItem('current_user', user);
 
-    } catch (error) {
-      //Dialog to alert a user that an application is failing to update or covert JSON structure
-    } finally {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else {
+            print('User not found');
+          }
+        } else {
+          print('User not found');
+        }
+      } catch (error) {
+        //Dialog to alert a user that an application is failing to update or covert JSON structure
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
       setState(() {
         _isLoading = false;
       });

@@ -74,21 +74,6 @@ class _WeightList extends State<WeightList> {
       itemCount: weightList.length,
       itemBuilder: (context, index) {
         final item = weightList[index];
-
-        // return Dismissible(
-        //   key: Key(item.weight),
-        //   onDismissed: (direction) {
-        //     setState(
-        //       () {
-        //         weightList.removeAt(index);
-        //       },
-        //     );
-        //   },
-        //   background: Container(color: Colors.red),
-        //   child: ListTile(
-        //     title: Text('${item.weight}'),
-        //   ),
-        // );
         return Card(
           elevation: 4,
           shadowColor: Colors.greenAccent,
@@ -99,7 +84,7 @@ class _WeightList extends State<WeightList> {
                 onTap: () {
                   //TODO edit
                 },
-                onLongPress: (){
+                onLongPress: () {
                   //TODO delete
                 },
                 child: Column(
