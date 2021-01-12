@@ -1,5 +1,5 @@
 # weight-tracker
-`Is a mobile application which is powered by django backend`
+`Is a flutter mobile application, that is powered by django backend`
 
 ## Django Server
 To strat Django server
