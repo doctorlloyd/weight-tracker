@@ -28,6 +28,7 @@ dependencies:
   localstorage: ^3.0.2+5
   transparent_image: ^1.0.0
   cached_network_image: ^2.2.0
+  toast: ^0.1.5
   http: ^0.12.1
 
 dev_dependencies:

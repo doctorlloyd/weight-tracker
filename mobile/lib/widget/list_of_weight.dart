@@ -5,6 +5,7 @@ import 'package:mobile/models/customer.dart';
 import 'package:mobile/models/weight.dart';
 import 'package:mobile/rest/data_file.dart';
 import 'package:mobile/widget/update_weight.dart';
+import 'package:toast/toast.dart';
 
 class WeightList extends StatefulWidget {
   @override
@@ -110,7 +111,7 @@ class _WeightList extends State<WeightList> {
               );
             },
             onLongPress: () {
-              delete(weight,context);
+              delete(weight, context);
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,9 +126,11 @@ class _WeightList extends State<WeightList> {
     );
   }
 
-  void delete(Weight weight, BuildContext context) async{
+  void delete(Weight weight, BuildContext context) async {
     Response response = await api.deleteWeight(weight);
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
+      Toast.show("Weight object deleted: ${weight.weight}", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
       setState(() {
         getWeightList(context);
       });
