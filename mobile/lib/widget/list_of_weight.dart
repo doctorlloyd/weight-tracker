@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/customer.dart';
 import 'package:mobile/models/weight.dart';
@@ -109,7 +110,7 @@ class _WeightList extends State<WeightList> {
               );
             },
             onLongPress: () {
-              delete(weight);
+              delete(weight,context);
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +125,12 @@ class _WeightList extends State<WeightList> {
     );
   }
 
-  void delete(Weight weight) async{
-    api.deleteWeight(weight);
+  void delete(Weight weight, BuildContext context) async{
+    Response response = await api.deleteWeight(weight);
+    if(response.statusCode == 200){
+      setState(() {
+        getWeightList(context);
+      });
+    }
   }
 }

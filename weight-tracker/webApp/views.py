@@ -78,15 +78,14 @@ class AddWeightView(generics.RetrieveUpdateAPIView):
             request_data = dict(request.data)
             weight = request_data.get('weight')
             user = request_data.get('customer')
-            response = models.Weight.objects.create(user,weight)
+            response = models.Weight.objects.get_or_create(user,weight)
         except Exception as ex:
             print('I failed here: '+str(ex))
         return Response(response, status=status.HTTP_200_OK)
 
-    def delete(self,request,train_id=None):
-        route = get_object_or_404(models.Weight, pk=request.data.get('weightId'))
-        response = 'Successful delete route'.format(route.display_name())
-        route.delete()
+    def delete(self,request):
+        entry= models.Weight.objects.get(weight_id= self.request.query_params.get('weightId'))
+        response = entry.delete()
         return Response(response, status=status.HTTP_200_OK)
 
     def put(self,request):

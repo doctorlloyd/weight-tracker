@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class RestDataSource {
   NetworkUtil netUtil = new NetworkUtil();
   final LocalStorage storage = new LocalStorage('weightTrackerDB');
-  static final domain = 'http://192.168.8.102:8000';
+  static final domain = 'http://192.168.0.145:8000';
   static final baseUrl = "$domain/api";
 
   String conservationID;
@@ -74,6 +74,7 @@ class RestDataSource {
     final weighturl = baseUrl + '/addweight/?weightId=${weight.weightId}';
     http.Response response = await http.delete(weighturl,
         headers: requestHeaders());
+    print('------------------- ${response.statusCode}');
     return response;
   }
 
