@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/customer.dart';
 import 'package:mobile/models/token.dart';
@@ -126,9 +127,14 @@ class _UpdateWeight extends State<UpdateWeight> {
 
   updateWeight() async {
     if (enteredWeightController.text.isNotEmpty) {
-      Token response = await _restDataSource.putWeight(
-          enteredWeightController.text, customer.user.toString());
-      enteredWeightController.clear();
+      Response response = await _restDataSource.putWeight(
+          enteredWeightController.text,
+          widget.weight.weightId.toString(),
+          customer.user.toString());
+      if (response.body == '1') {
+        enteredWeightController.clear();
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     }
   }
 }

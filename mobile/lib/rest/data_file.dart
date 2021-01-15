@@ -56,23 +56,25 @@ class RestDataSource {
     );
   }
 
-  Future<Token> addWeight(String weight, String user) async {
+  Future<Response> addWeight(String weight, String customer) async {
     final weighturl = baseUrl + '/addweight/';
-    return await netUtil.post(weighturl,
-        headers: requestHeaders(),
-        body: {'weight': weight, 'user':user}).then((dynamic res) {
-          print('------------------: $res');
-      return Token.fromJson(res);
-    });
+    http.Response response = await http.post(weighturl,
+        body: {'weight': weight, 'customer': customer}, headers: requestHeaders());
+    return response;
   }
-  Future<Token> putWeight(String weight, String user) async {
+
+  Future<Response> putWeight(String weight, String weightId, String customer) async {
     final weighturl = baseUrl + '/addweight/';
-    return await netUtil.post(weighturl,
-        headers: requestHeaders(),
-        body: {'weight': weight, 'user':user}).then((dynamic res) {
-          print('------------------: $res');
-      return Token.fromJson(res);
-    });
+    http.Response response = await http.put(weighturl,
+        body: {'weight': weight, 'weight_id': weightId, 'customer':customer}, headers: requestHeaders());
+    return response;
+  }
+
+  Future<Response> deleteWeight(Weight weight) async {
+    final weighturl = baseUrl + '/addweight/?weightId=${weight.weightId}';
+    http.Response response = await http.delete(weighturl,
+        headers: requestHeaders());
+    return response;
   }
 
   //Token returned during login

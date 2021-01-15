@@ -28,6 +28,7 @@ class Customer(models.Model):
     phone = models.CharField(max_length=24, null=False)
 
 class Weight(models.Model):
+    weight_id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(
         Customer, related_name='weights', on_delete=models.CASCADE)
     weight = models.CharField(max_length=30, null=True)

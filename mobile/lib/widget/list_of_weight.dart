@@ -125,6 +125,6 @@ class _WeightList extends State<WeightList> {
   }
 
   void delete(Weight weight) async{
-
+    api.deleteWeight(weight);
   }
 }

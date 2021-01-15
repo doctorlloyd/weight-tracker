@@ -1,9 +1,10 @@
 from django.db.models import query_utils
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
+from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from rest_framework.response import Response
 from webApp import serializers, models
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.test import APIClient
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -71,23 +72,23 @@ class AddWeightView(generics.RetrieveUpdateAPIView):
     serializer_class = serializers.WeightList
     authentication_class = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         response = {}
         try:
             request_data = dict(request.data)
             weight = request_data.get('weight')
-            user = request.user
+            user = request_data.get('customer')
             response = models.Weight.objects.create(user,weight)
         except Exception as ex:
-            pass
-        return HttpResponse(response)
+            print('I failed here: '+str(ex))
+        return Response(response, status=status.HTTP_200_OK)
 
     def delete(self,request,train_id=None):
-        route = get_object_or_404(models.Weight, pk=train_id)
+        route = get_object_or_404(models.Weight, pk=request.data.get('weightId'))
         response = 'Successful delete route'.format(route.display_name())
         route.delete()
-        return HttpResponse(response)
+        return Response(response, status=status.HTTP_200_OK)
 
-    def put(self,request,train_id=None):
-        response = models.Weight.objects.filter(pk=train_id).update(weight=request.weight)
-        return HttpResponse(response)
+    def put(self,request):
+        response = models.Weight.objects.filter(pk=request.data.get('weight_id')).update(weight=request.data.get('weight'))
+        return Response(response, status=status.HTTP_200_OK)

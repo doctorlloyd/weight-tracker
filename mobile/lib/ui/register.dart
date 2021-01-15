@@ -325,7 +325,7 @@ class _Register extends State<Register> {
 
     if ((confirmPasswordLoginController.text).isNotEmpty ==
         (passwordLoginController.text).isNotEmpty) {
-      try {
+      // try {
         Token token = await _restDataSource.register(
             usernameLoginController.text, passwordLoginController.text,
             emailLoginController.text);
@@ -343,13 +343,13 @@ class _Register extends State<Register> {
         } else {
           print('User not found');
         }
-      } catch (error) {
+      // } catch (error) {
         //Dialog to alert a user that an application is failing to update or covert JSON structure
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      // } finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      // }
     } else {
       setState(() {
         _isLoading = false;

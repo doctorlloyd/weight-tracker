@@ -17,7 +17,7 @@ class WeightList(serializers.ModelSerializer):
     customer = CustomerSerializer(read_only=True)
     class Meta:
         model = models.Weight 
-        fields = ['weight','customer','date_entered']
+        fields = ['weight_id', 'weight', 'customer', 'date_entered']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
