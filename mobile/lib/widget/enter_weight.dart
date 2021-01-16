@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/customer.dart';
-import 'package:mobile/models/token.dart';
 import 'package:mobile/rest/data_file.dart';
+import 'package:toast/toast.dart';
 
 class Weight extends StatefulWidget {
   @override
@@ -133,6 +133,8 @@ class _Weight extends State<Weight> {
       Response response = await _restDataSource.addWeight(
           enteredWeightController.text, customer.user.toString());
       if (response.body == '1') {
+        Toast.show("Weight object added", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
         enteredWeightController.clear();
         Navigator.pushReplacementNamed(context, '/home');
       }

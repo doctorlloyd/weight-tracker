@@ -47,12 +47,6 @@ class _WeightList extends State<WeightList> {
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30.0),
-          ),
-        ),
         child: FutureBuilder(
           future: getWeightList(context),
           builder: (context, snapshot) {
@@ -94,11 +88,11 @@ class _WeightList extends State<WeightList> {
 
   Widget card(Weight weight) {
     return Card(
-      elevation: 4,
+      elevation: 8,
       shadowColor: Colors.greenAccent,
       child: Container(
         child: Padding(
-          padding: EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(16.0),
           child: InkWell(
             onTap: () {
               Navigator.push(

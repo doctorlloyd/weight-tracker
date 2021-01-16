@@ -3,7 +3,8 @@ from django.http.response import HttpResponse, JsonResponse
 from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from rest_framework.response import Response
-from webApp import serializers, models
+from webApp import serializers
+from webApp.models import Weight, Customer, User
 from rest_framework import generics, status
 from rest_framework.test import APIClient
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -17,10 +18,10 @@ class WeightView(generics.ListAPIView):
     serializer_class = serializers.WeightList
 
     def get_queryset(self):
-        queryset = models.Weight.objects.all()
+        queryset = Weight.objects.all()
         customer = self.request.query_params.get('customer', None)
         if customer is not None:
-            queryset = models.Weight.objects.filter(customer_id=customer).order_by("date_entered").distinct()
+            queryset = Weight.objects.filter(customer_id=customer).order_by("date_entered").distinct()
         return queryset
 
 class CustomerView(generics.RetrieveUpdateAPIView):
@@ -32,14 +33,14 @@ class CustomerView(generics.RetrieveUpdateAPIView):
         return self.request.user.customer
 
     def get_queryset(self):
-        return models.Customer.objects.none()
+        return Customer.objects.none()
 
 class RegisterUser(generics.CreateAPIView):
     serializer_class = serializers.UserSerializer
     permission_classes = (AllowAny,)
 
     def get_queryset(self):
-        queryset = models.User.objects.get(username=self.request.user.username)
+        queryset = User.objects.get(username=self.request.user.username)
         return queryset
 
     def post(self, request, *args, **kwargs):
@@ -73,21 +74,21 @@ class AddWeightView(generics.RetrieveUpdateAPIView):
     authentication_class = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     def post(self, request):
-        response = {}
         try:
-            request_data = dict(request.data)
-            weight = request_data.get('weight')
-            user = request_data.get('customer')
-            response = models.Weight.objects.get_or_create(user,weight)
+            weight = request.data.get('weight')
+            user = request.data.get('customer')
+            customer = Customer.objects.get(pk=user)
+            weight_object = Weight(customer = customer, weight = weight)
+            weight_object.save()
         except Exception as ex:
             print('I failed here: '+str(ex))
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(1, status=status.HTTP_200_OK)
 
     def delete(self,request):
-        entry= models.Weight.objects.get(weight_id= self.request.query_params.get('weightId'))
+        entry= Weight.objects.get(weight_id= self.request.query_params.get('weightId'))
         response = entry.delete()
         return Response(response, status=status.HTTP_200_OK)
 
     def put(self,request):
-        response = models.Weight.objects.filter(pk=request.data.get('weight_id')).update(weight=request.data.get('weight'))
+        response = Weight.objects.filter(pk=request.data.get('weight_id')).update(weight=request.data.get('weight'))
         return Response(response, status=status.HTTP_200_OK)

@@ -74,7 +74,6 @@ class RestDataSource {
     final weighturl = baseUrl + '/addweight/?weightId=${weight.weightId}';
     http.Response response = await http.delete(weighturl,
         headers: requestHeaders());
-    print('------------------- ${response.statusCode}');
     return response;
   }
 
